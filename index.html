@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Divine Insight — Modern Tarot, Beautifully Decoded</title>
+  <meta name="description" content="Divine Insight is a modern tarot platform: one canonical 78-card dataset, four crafted experiences across web, mobile, and Unity. Draw three cards and explore the platform." />
+  <meta name="theme-color" content="#0a0a18" />
+  <meta property="og:title" content="Divine Insight — Modern Tarot, Beautifully Decoded" />
+  <meta property="og:description" content="Ancient wisdom, modern craft. Try an interactive three-card draw." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="orb orb-1" aria-hidden="true"></div>
+  <div class="orb orb-2" aria-hidden="true"></div>
+  <div class="orb orb-3" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a class="brand" href="#top" aria-label="Divine Insight home">
+      <span class="brand-mark">✦</span>
+      <span class="brand-name">Divine Insight</span>
+    </a>
+    <nav class="nav-links" id="navLinks" aria-label="Primary">
+      <a href="#draw">Draw</a>
+      <a href="#branches">Branches</a>
+      <a href="#about">About</a>
+      <a class="btn btn-small btn-gold" href="#draw">Try a reading</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-inner">
+        <p class="eyebrow reveal">A modern tarot platform</p>
+        <h1 class="reveal">Ancient wisdom,<br /><em>beautifully decoded.</em></h1>
+        <p class="lede reveal">
+          Divine Insight pairs the timeless 78-card tarot with modern craft —
+          one canonical dataset, four lovingly built experiences across
+          web, mobile, and Unity.
+        </p>
+        <div class="hero-cta reveal">
+          <a href="#draw" class="btn btn-gold">Draw three cards</a>
+          <a href="#branches" class="btn btn-ghost">Explore the platform</a>
+        </div>
+      </div>
+      <div class="hero-cards" aria-hidden="true">
+        <div class="mini-card mc-1"><span class="mc-num">0</span><span class="mc-glyph">☀</span><span class="mc-name">The Fool</span></div>
+        <div class="mini-card mc-2"><span class="mc-num">II</span><span class="mc-glyph">☾</span><span class="mc-name">High Priestess</span></div>
+        <div class="mini-card mc-3"><span class="mc-num">VII</span><span class="mc-glyph">✦</span><span class="mc-name">The Chariot</span></div>
+      </div>
+      <a class="scroll-cue" href="#draw" aria-label="Scroll to card draw">
+        <span class="scroll-cue-dot"></span>
+      </a>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats" aria-label="Platform at a glance">
+      <div class="stat reveal">
+        <span class="stat-num" data-count="78">0</span>
+        <span class="stat-label">cards in the canon</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat-num" data-count="4">0</span>
+        <span class="stat-label">platform branches</span>
+      </div>
+      <div class="stat reveal">
+        <span class="stat-num" data-count="1">0</span>
+        <span class="stat-label">shared dataset</span>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE DRAW -->
+    <section id="draw" class="draw">
+      <div class="section-head reveal">
+        <p class="eyebrow">Interactive</p>
+        <h2>Try a three-card draw</h2>
+        <p class="section-sub">
+          Past &middot; Present &middot; Future — a taste of the deck.
+          Tap each card to reveal it. The full 78-card experience lives in the apps.
+        </p>
+      </div>
+      <div class="spread" id="spread" aria-live="polite">
+        <div class="slot" data-pos="Past"><span class="slot-label">Past</span><div class="slot-card"></div></div>
+        <div class="slot" data-pos="Present"><span class="slot-label">Present</span><div class="slot-card"></div></div>
+        <div class="slot" data-pos="Future"><span class="slot-label">Future</span><div class="slot-card"></div></div>
+      </div>
+      <p class="draw-hint" id="drawHint">Press shuffle, then tap each card to reveal its meaning.</p>
+      <div class="draw-actions">
+        <button class="btn btn-gold" id="drawBtn">Shuffle &amp; draw</button>
+        <button class="btn btn-ghost" id="againBtn" hidden>Draw again</button>
+      </div>
+    </section>
+
+    <!-- BRANCHES -->
+    <section id="branches" class="branches">
+      <div class="section-head reveal">
+        <p class="eyebrow">The platform</p>
+        <h2>One platform, four branches</h2>
+        <p class="section-sub">Every branch reads from the same versioned dataset — no forks, no drift.</p>
+      </div>
+      <div class="branch-grid">
+        <article class="branch-card reveal">
+          <div class="branch-icon">◈</div>
+          <h3>Web</h3>
+          <p>Readings in your browser. A TanStack Start site with guided spreads, Stripe-powered readings, and tips.</p>
+          <a class="branch-link" href="https://github.com/mal494/divine-insight-web" target="_blank" rel="noopener">View on GitHub →</a>
+        </article>
+        <article class="branch-card reveal">
+          <div class="branch-icon">☾</div>
+          <h3>Mobile</h3>
+          <p>A tarot journal for Android. Jetpack Compose, offline-first with Room, and optional Gemini AI insight.</p>
+          <span class="branch-badge">Private beta</span>
+        </article>
+        <article class="branch-card reveal">
+          <div class="branch-icon">✦</div>
+          <h3>Studio</h3>
+          <p>The Unity branch: card data model, spread scoring engine, and dataset validation with full test coverage.</p>
+          <span class="branch-badge">Private beta</span>
+        </article>
+        <article class="branch-card reveal">
+          <div class="branch-icon">❖</div>
+          <h3>Core</h3>
+          <p>The canonical 78-card dataset and schema. Versioned releases every branch pins — the trunk of it all.</p>
+          <a class="branch-link" href="https://github.com/mal494/divine-insight-core" target="_blank" rel="noopener">View on GitHub →</a>
+        </article>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="about">
+      <div class="about-inner reveal">
+        <p class="eyebrow">Philosophy</p>
+        <h2>Ancient wisdom, modern craft</h2>
+        <p>
+          Tarot has guided reflection for centuries. Divine Insight treats it with
+          respect — and with engineering rigor. Card data is versioned like software,
+          spreads are scored with transparent positional and elemental weights, and
+          every experience is designed to feel calm, beautiful, and honest.
+        </p>
+        <ul class="about-list">
+          <li><strong>One truth:</strong> a single versioned dataset feeds every branch.</li>
+          <li><strong>Transparent scoring:</strong> spread meanings you can inspect, not black boxes.</li>
+          <li><strong>Crafted UX:</strong> calm visuals, thoughtful motion, accessible by default.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta reveal">
+      <h2>Your reading is waiting.</h2>
+      <p>Draw three cards above — or dive into the code and craft behind the platform.</p>
+      <div class="hero-cta">
+        <a href="#draw" class="btn btn-gold">Draw three cards</a>
+        <a href="https://github.com/mal494/divine-insight-core" target="_blank" rel="noopener" class="btn btn-ghost">Explore the dataset</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <a class="brand" href="#top"><span class="brand-mark">✦</span><span class="brand-name">Divine Insight</span></a>
+      <p class="footer-note">Crafted by Michael Lind · <span id="year"></span></p>
+      <div class="footer-links">
+        <a href="https://github.com/mal494/divine-insight-core" target="_blank" rel="noopener">Core</a>
+        <a href="https://github.com/mal494/divine-insight-web" target="_blank" rel="noopener">Web</a>
+        <a href="https://github.com/mal494" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
