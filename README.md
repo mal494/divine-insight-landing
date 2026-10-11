@@ -25,9 +25,19 @@ A single static site — no build step, no dependencies. Just open `index.html`,
 | `index.html` | Page structure and copy |
 | `styles.css` | All styling, animations, responsive layout |
 | `app.js` | Starfield, reveals, counters, and the card-draw demo |
+| `core.version` | Pinned Divine Insight Core release the draw demo consumes |
+
+## Card data
+
+The three-card draw loads the **full 78-card canon live** from the pinned
+[Divine Insight Core](https://github.com/mal494/divine-insight-core) release
+(`core.version`, currently `v1.6.1`) at draw time — the same "consume a
+versioned release, never bundle your own copy" rule every platform branch
+follows. If the dataset can't be reached (offline), the demo falls back to a
+small built-in teaser deck so the page still works.
 
 ## Customizing
 
-- **Card demo data** lives in the `DECK` array at the top of `app.js` — swap in real card copy from Divine Insight Core.
+- **Card demo data** — the draw pulls live from Core; the `FALLBACK_DECK` array at the top of `app.js` is only the offline teaser.
 - **Colors** are CSS variables in `:root` in `styles.css` (`--gold`, `--violet`, `--bg`, …).
 - **Branch links** are in the `#branches` section of `index.html`.

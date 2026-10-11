@@ -151,6 +151,7 @@ main, .nav, .footer { position: relative; z-index: 1; }
 .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
 .btn-small { padding: 0.55rem 1.3rem; font-size: 0.88rem; }
+.btn:disabled { opacity: 0.65; cursor: wait; transform: none; }
 
 /* ---------- hero ---------- */
 .hero {

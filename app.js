@@ -157,7 +157,65 @@
   /* =====================================================
      Interactive three-card draw
      ===================================================== */
-  var DECK = [
+  /* Pinned Core release — mirrors the `core.version` file at the repo root.
+     Like every Divine Insight branch, this page consumes a versioned Core
+     release rather than bundling its own copy of the card data. */
+  var CORE_VERSION = "v1.6.1";
+  var CORE_URL = "https://raw.githubusercontent.com/mal494/divine-insight-core/" +
+    CORE_VERSION + "/data/tarot_data_v1.6.1.json";
+
+  var SUIT_GLYPHS = { Wands: "♣", Cups: "♥", Swords: "♠", Pentacles: "♦" };
+
+  function toRoman(n) {
+    var table = [[10, "X"], [9, "IX"], [5, "V"], [4, "IV"], [1, "I"]];
+    var s = "";
+    table.forEach(function (pair) {
+      while (n >= pair[0]) { s += pair[1]; n -= pair[0]; }
+    });
+    return s || "0";
+  }
+
+  function truncate(s, max) {
+    s = String(s || "");
+    return s.length > max ? s.slice(0, max - 1).trimEnd() + "…" : s;
+  }
+
+  function mapCoreCard(c) {
+    var isMajor = c.arcana === "Major";
+    var up = (c.meanings && c.meanings.upright) || {};
+    var rev = (c.meanings && c.meanings.reversed) || {};
+    return {
+      num: isMajor ? toRoman(c.number) : String(c.number),
+      name: c.name,
+      glyph: isMajor ? "✦" : (SUIT_GLYPHS[c.suit] || "✦"),
+      keys: (up.keywords || []).slice(0, 3).join(" · "),
+      up: truncate(up.description, 150),
+      rev: truncate(rev.description, 150)
+    };
+  }
+
+  var deckPromise = null;
+  function loadFullDeck() {
+    if (!deckPromise) {
+      deckPromise = fetch(CORE_URL)
+        .then(function (res) {
+          if (!res.ok) throw new Error("core fetch failed");
+          return res.json();
+        })
+        .then(function (data) {
+          var cards = (data.cards || [])
+            .map(mapCoreCard)
+            .filter(function (c) { return c.name && c.up; });
+          return cards.length >= 78 ? cards : null;
+        })
+        .catch(function () { return null; })
+        .then(function (cards) { return cards || FALLBACK_DECK; });
+    }
+    return deckPromise;
+  }
+
+  /* Offline fallback: a small teaser deck used only if Core can't be reached. */
+  var FALLBACK_DECK = [
     { num: "0", name: "The Fool", glyph: "☀",
       keys: "Beginnings · spontaneity · leap of faith",
       up: "A new journey beckons — trust the step into the unknown.",
@@ -256,17 +314,25 @@
     // clear previous
     slots.forEach(function (s) { s.querySelector(".slot-card").innerHTML = ""; });
     againBtn.hidden = true;
-    var picks = shuffled(DECK).slice(0, 3);
-    hint.textContent = "The cards are dealt — tap each one to reveal its meaning.";
-    picks.forEach(function (card, i) {
-      var holder = slots[i].querySelector(".slot-card");
-      var el = buildCard(card, POSITIONS[i]);
-      holder.appendChild(el);
-      // staggered deal-in
-      setTimeout(function () { el.classList.add("dealt"); }, prefersReduced ? 0 : 180 * i + 120);
+    drawBtn.disabled = true;
+    var originalLabel = drawn ? "Reshuffle" : "Shuffle & draw";
+    drawBtn.textContent = "Consulting the deck…";
+    hint.textContent = "Reaching out to the full 78-card canon…";
+
+    loadFullDeck().then(function (deck) {
+      var picks = shuffled(deck).slice(0, 3);
+      hint.textContent = "The cards are dealt — tap each one to reveal its meaning.";
+      picks.forEach(function (card, i) {
+        var holder = slots[i].querySelector(".slot-card");
+        var el = buildCard(card, POSITIONS[i]);
+        holder.appendChild(el);
+        // staggered deal-in
+        setTimeout(function () { el.classList.add("dealt"); }, prefersReduced ? 0 : 180 * i + 120);
+      });
+      drawn = true;
+      drawBtn.disabled = false;
+      drawBtn.textContent = "Reshuffle";
     });
-    drawn = true;
-    drawBtn.textContent = "Reshuffle";
   }
 
   drawBtn.addEventListener("click", draw);
