@@ -25,16 +25,21 @@ A single static site — no build step, no dependencies. Just open `index.html`,
 | `index.html` | Page structure and copy |
 | `styles.css` | All styling, animations, responsive layout |
 | `app.js` | Starfield, reveals, counters, and the card-draw demo |
-| `core.version` | Pinned Divine Insight Core release the draw demo consumes |
+| `core.version` | Record of the intended Core pin. `app.js` does not read this file |
 
 ## Card data
 
-The three-card draw loads the **full 78-card canon live** from the pinned
-[Divine Insight Core](https://github.com/mal494/divine-insight-core) release
-(`core.version`, currently `v1.6.1`) at draw time — the same "consume a
-versioned release, never bundle your own copy" rule every platform branch
-follows. If the dataset can't be reached (offline), the demo falls back to a
-small built-in teaser deck so the page still works.
+The fetch URL is hardcoded in `app.js`. `core.version` is a separate note of the intended pin; editing that file leaves the draw on the old URL. Move `CORE_VERSION` and the dataset filename inside `CORE_URL` together:
+
+```js
+var CORE_VERSION = "v1.6.1";
+var CORE_URL = "https://raw.githubusercontent.com/mal494/divine-insight-core/" +
+  CORE_VERSION + "/data/tarot_data_v1.6.1.json";
+```
+
+`loadFullDeck` keeps the response when it is OK and at least 78 cards have a name and an upright description. A failed fetch, a shorter file, or opening `index.html` via `file://` (the browser blocks that `fetch`) uses `FALLBACK_DECK`: eight major-arcana teasers in `app.js`.
+
+Each dealt card keeps three upright keywords, truncates upright and reversed text to 150 characters, and is reversed when `Math.random() < 0.28`.
 
 ## Customizing
 
